@@ -54,7 +54,21 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
 ```
-Your answer...
+Type 1 (Overwrite)
+In a Type 1 approach, the database only keeps the latest address for each customer. When a customer moves, their old address is overwritten with the new one.
+This option works if the business only cares about the most current address.
+Relationship: CUSTOMER 1 : 1 CUSTOMER_ADDRESS
+Columns:
+customer_id (PK/FK → CUSTOMER), address_line1, address_line2, city, state_province, postal_code, country
+
+Type 2 (History)
+In a Type 2 approach, the database keeps a history of all addresses a customer has ever used. When a customer moves, the old row is closed (end date set), and a new row is inserted.
+Relationship: CUSTOMER 1 : ∞ CUSTOMER_ADDRESS
+Columns (example):
+customer_address_id (PK), customer_id (FK), address_line1, address_line2, city, state_province, postal_code, country, effective_start_date, effective_end_date, is_current
+
+For a bookstore, where the store wants to keep customer addresses, Type 2 would be the right option, since customer orders need to reflect the correct shipping address at the time of purchase, even if the customer later moves.
+
 ```
 
 ***
